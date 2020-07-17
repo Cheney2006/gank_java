@@ -57,6 +57,7 @@ versions.support = '1.1.0'
 versions.timber = "4.5.1"
 versions.work = "2.1.0-alpha01"
 versions.preference = "1.1.0-rc01"
+versions.viewpager = "2:1.0.0"
 versions.rxjava2debug = "1.4.0"
 ext.versions = versions
 
@@ -192,6 +193,10 @@ navigation.ui = "androidx.navigation:navigation-ui:$versions.navigation"
 navigation.ui_ktx = "androidx.navigation:navigation-ui-ktx:$versions.navigation"
 navigation.safe_args_plugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.navigation"
 deps.navigation = navigation
+
+def viewpager = [:]
+viewpager.viewpager2 = "androidx.viewpager2:viewpager:$versions.viewpager"
+desps.viewpager=viewpager
 
 def preference = [:]
 preference.core = "androidx.preference:preference:$versions.preference"
