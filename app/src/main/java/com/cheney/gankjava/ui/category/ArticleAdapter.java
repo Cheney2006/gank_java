@@ -5,15 +5,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cheney.gankjava.R;
 import com.cheney.gankjava.bean.Gank;
 import com.cheney.gankjava.databinding.ItemGankBinding;
 
-public class ArticleAdapter extends ListAdapter<Gank, ArticleAdapter.GankVH> {
+public class ArticleAdapter extends PagedListAdapter<Gank, ArticleAdapter.GankVH> {
 
 
     public ArticleAdapter() {

@@ -3,6 +3,7 @@ package com.cheney.gankjava.di;
 import androidx.lifecycle.ViewModel;
 
 import com.cheney.gankjava.base.di.ViewModelKey;
+import com.cheney.gankjava.bean.CategoryType;
 import com.cheney.gankjava.ui.category.ArticleViewModel;
 import com.cheney.gankjava.ui.category.CategoryViewModel;
 import com.cheney.gankjava.ui.home.HomeViewModel;

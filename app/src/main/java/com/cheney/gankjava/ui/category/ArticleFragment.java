@@ -59,7 +59,7 @@ public class ArticleFragment extends DaggerFragment {
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-        mViewModel.ganks.observe(getViewLifecycleOwner(), ganks -> adapter.submitList(ganks));
+        mViewModel.pagedListLiveData.observe(getViewLifecycleOwner(), ganks -> adapter.submitList(ganks));
     }
 
 }

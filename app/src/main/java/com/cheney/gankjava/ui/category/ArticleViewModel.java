@@ -1,50 +1,61 @@
 package com.cheney.gankjava.ui.category;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 
 import com.cheney.gankjava.bean.CategoryType;
 import com.cheney.gankjava.bean.Gank;
-import com.cheney.gankjava.constants.Constants;
 import com.cheney.gankjava.repository.GankRepository;
 
-import java.util.List;
-
 import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class ArticleViewModel extends ViewModel {
 
     private final GankRepository repository;
+    private CompositeDisposable disposable;
+    private ArticleDataSourceFactory factory;
+    public LiveData<Boolean> isLoading = new MutableLiveData<>();
+    public LiveData<Throwable> error = new MutableLiveData<>();
+    public LiveData<PagedList<Gank>> pagedListLiveData;
 
-    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    public MutableLiveData<CategoryType> categoryType = new MutableLiveData<>();
-    public MutableLiveData<List<Gank>> ganks = new MutableLiveData<>();
-    public MutableLiveData<Throwable> error = new MutableLiveData<>();
 
     @Inject
     public ArticleViewModel(GankRepository repository) {
         this.repository = repository;
+        disposable = new CompositeDisposable();
     }
 
     public void initType(CategoryType type) {
-        categoryType.setValue(type);
-        getByCategoryType();
+        factory = new ArticleDataSourceFactory(repository, type, disposable);
+        initPaging();
     }
 
-    private void getByCategoryType() {
-        isLoading.postValue(true);
-        repository.getByCategoryType(Constants.Api.CATEGORY_Article, categoryType.getValue().getType()).subscribe(data -> {
-            isLoading.postValue(false);
-            ganks.postValue(data);
-        }, throwable -> {
-            isLoading.postValue(false);
-            error.postValue(throwable);
-        });
+    private void initPaging() {
+        PagedList.Config config = new PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(10).setInitialLoadSizeHint(10).setPrefetchDistance(2).build();
+        pagedListLiveData = new LivePagedListBuilder<>(factory, config).build();
+
+        isLoading = Transformations.switchMap(factory.getDataSourceMutableLiveData(), dataSource -> dataSource.getIsLoading());
+        error = Transformations.switchMap(factory.getDataSourceMutableLiveData(), dataSource -> dataSource.getError());
     }
+
 
     public void refresh() {
-        if (isLoading.getValue() == null || !isLoading.getValue()) {
-            getByCategoryType();
+        factory.refresh();
+
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (disposable != null) {
+            disposable.clear();
+            disposable = null;
         }
     }
 }
