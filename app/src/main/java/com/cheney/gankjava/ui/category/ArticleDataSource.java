@@ -30,11 +30,7 @@ public class ArticleDataSource extends ItemKeyedDataSource<Integer, Gank> {
     private MutableLiveData<Throwable> error = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    /**
-     * 下拉刷新调初始化
-     */
-    private LoadInitialParams<Integer> params;
-    private LoadInitialCallback<Gank> callback;
+
 
     //    @Inject
     public ArticleDataSource(GankRepository repository, CategoryType categoryType, CompositeDisposable compositeDisposable) {
@@ -45,8 +41,6 @@ public class ArticleDataSource extends ItemKeyedDataSource<Integer, Gank> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Gank> callback) {
-        this.params = params;
-        this.callback = callback;
         Log.d(TAG, "Fetching  params requestedInitialKey:" + params.requestedInitialKey + ",requestedLoadSize=" + params.requestedLoadSize);
         isLoading.postValue(true);
         repository.getByCategoryType(Constants.Api.CATEGORY_Article, categoryType.getType(), params.requestedLoadSize, pageNo)

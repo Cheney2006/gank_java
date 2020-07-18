@@ -70,6 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{gank.author}"
+            android:drawableLeft="@drawable/ic_author"
+            android:drawablePadding="4dp"
             app:layout_constraintBottom_toBottomOf="@id/cover_iv"
             app:layout_constraintLeft_toLeftOf="@id/type_tv" />
 
@@ -78,6 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
+            android:drawablePadding="4dp"
             android:drawableLeft="@drawable/ic_views_24"
             android:text="@{String.valueOf(gank.views)}"
             app:layout_constraintLeft_toRightOf="@id/author_tv"

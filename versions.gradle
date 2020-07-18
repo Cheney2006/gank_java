@@ -196,7 +196,7 @@ deps.navigation = navigation
 
 def viewpager = [:]
 viewpager.viewpager2 = "androidx.viewpager2:viewpager:$versions.viewpager"
-desps.viewpager=viewpager
+deps.viewpager = viewpager
 
 def preference = [:]
 preference.core = "androidx.preference:preference:$versions.preference"

@@ -38,12 +38,15 @@ dependencies {
     implementation deps.support.app_compat
     implementation deps.support.recyclerview
     implementation deps.support.swipe_refresh
+//    implementation deps.support.v4
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation deps.support.design
+
     implementation deps.constraint_layout
-    implementation deps.design
     //navigation
     implementation deps.navigation.fragment
     implementation deps.navigation.ui
-    implementation deps.viewpager.viewpager2
+
 
 
 
@@ -91,7 +94,6 @@ dependencies {
 
     //banner
     implementation "com.youth.banner:banner:2.0.12"
-
 
 }
 

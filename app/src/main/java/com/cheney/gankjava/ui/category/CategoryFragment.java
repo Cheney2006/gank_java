@@ -24,6 +24,7 @@ import dagger.android.support.DaggerFragment;
 
 public class CategoryFragment extends DaggerFragment {
 
+
     public static final String TAG = "CategoryFragment";
 
     @Inject
@@ -45,6 +46,7 @@ public class CategoryFragment extends DaggerFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        binding.toolbar.myToolbar.setTitle(R.string.title_category);
         categoryViewModel.categoryTypes.observe(getViewLifecycleOwner(), categoryTypes -> {
             initPager(categoryTypes);
         });

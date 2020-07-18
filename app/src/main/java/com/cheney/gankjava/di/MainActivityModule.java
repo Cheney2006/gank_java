@@ -4,7 +4,7 @@ import com.cheney.gankjava.ui.category.ArticleFragment;
 import com.cheney.gankjava.ui.category.CategoryFragment;
 import com.cheney.gankjava.ui.home.HomeFragment;
 import com.cheney.gankjava.ui.my.MyFragment;
-import com.cheney.gankjava.ui.sister.SisterFragment;
+import com.cheney.gankjava.ui.girl.GirlFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -22,7 +22,7 @@ public abstract class MainActivityModule {
     abstract ArticleFragment provideArticleFragment();
 
     @ContributesAndroidInjector
-    abstract SisterFragment provideSisterFragment();
+    abstract GirlFragment provideSisterFragment();
 
     @ContributesAndroidInjector
     abstract MyFragment provideMyFragment();

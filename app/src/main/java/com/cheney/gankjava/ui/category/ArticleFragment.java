@@ -25,7 +25,7 @@ public class ArticleFragment extends DaggerFragment {
     @Inject
     ViewModelProvider.Factory factory;
 
-    private ArticleViewModel mViewModel;
+    private ArticleViewModel viewModel;
 
     private FragmentArticleBinding binding;
 
@@ -44,11 +44,11 @@ public class ArticleFragment extends DaggerFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this, factory).get(ArticleViewModel.class);
-        mViewModel.initType(categoryType);
+        viewModel = new ViewModelProvider(this, factory).get(ArticleViewModel.class);
+        viewModel.initType(categoryType);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article, container, false);
         binding.setLifecycleOwner(this);
-        binding.setViewModel(mViewModel);
+        binding.setViewModel(viewModel);
         return binding.getRoot();
     }
 
@@ -59,7 +59,7 @@ public class ArticleFragment extends DaggerFragment {
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-        mViewModel.pagedListLiveData.observe(getViewLifecycleOwner(), ganks -> adapter.submitList(ganks));
+        viewModel.pagedListLiveData.observe(getViewLifecycleOwner(), ganks -> adapter.submitList(ganks));
     }
 
 }

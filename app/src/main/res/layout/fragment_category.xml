@@ -15,12 +15,16 @@
         android:layout_height="match_parent"
         tools:context="com.cheney.gankjava.ui.category.CategoryFragment">
 
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/layout_toolbar" />
+
         <com.cheney.gankjava.widget.CustomTabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:tabBackground="@color/colorPrimary"
             app:tabMode="scrollable"
             app:tabTextColor="@color/colorWhite" />
@@ -30,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tab_layout"/>
+            app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

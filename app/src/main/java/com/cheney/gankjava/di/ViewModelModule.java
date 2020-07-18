@@ -3,12 +3,10 @@ package com.cheney.gankjava.di;
 import androidx.lifecycle.ViewModel;
 
 import com.cheney.gankjava.base.di.ViewModelKey;
-import com.cheney.gankjava.bean.CategoryType;
 import com.cheney.gankjava.ui.category.ArticleViewModel;
 import com.cheney.gankjava.ui.category.CategoryViewModel;
 import com.cheney.gankjava.ui.home.HomeViewModel;
-import com.cheney.gankjava.ui.my.MyViewModel;
-import com.cheney.gankjava.ui.sister.SisterViewModel;
+import com.cheney.gankjava.ui.girl.GirlViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -32,12 +30,12 @@ public abstract class ViewModelModule {
     @ViewModelKey(ArticleViewModel.class)
     abstract ViewModel bindArticleViewModel(ArticleViewModel articleViewModel);
 
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(SisterViewModel.class)
-//    abstract ViewModel bindSisterViewModel(SisterViewModel sisterViewModel);
-//
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GirlViewModel.class)
+    abstract ViewModel bindGirlViewModel(GirlViewModel girlViewModel);
+
 //    @Binds
 //    @IntoMap
 //    @ViewModelKey(MyViewModel.class)

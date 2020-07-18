@@ -34,10 +34,6 @@ public class Constants {
          */
         public static String CATEGORY_Article = "Article";
 
-        public static String CATEGORY_FULI = "福利";
-        public static String CATEGORY_ANDROID = "Android";
-        public static String CATEGORY_FRONT_END = "frontend";
-        public static String CATEGORY_FLUTTER = "Flutter";
     }
 
 

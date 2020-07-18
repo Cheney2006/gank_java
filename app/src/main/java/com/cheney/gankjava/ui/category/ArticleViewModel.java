@@ -47,7 +47,6 @@ public class ArticleViewModel extends ViewModel {
 
     public void refresh() {
         factory.refresh();
-
     }
 
     @Override

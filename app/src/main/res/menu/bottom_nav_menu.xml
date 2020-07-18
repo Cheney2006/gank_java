@@ -13,8 +13,8 @@
 
     <item
         android:id="@+id/navigation_sister"
-        android:icon="@drawable/ic_sister_black_24"
-        android:title="@string/title_sister" />
+        android:icon="@drawable/ic_girl"
+        android:title="@string/title_girl" />
 
     <item
         android:id="@+id/navigation_my"

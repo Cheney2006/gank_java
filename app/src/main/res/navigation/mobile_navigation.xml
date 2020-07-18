@@ -19,9 +19,9 @@
 
     <fragment
         android:id="@+id/navigation_sister"
-        android:name="com.cheney.gankjava.ui.sister.SisterFragment"
-        android:label="@string/title_sister"
-        tools:layout="@layout/fragment_notifications" />
+        android:name="com.cheney.gankjava.ui.girl.GirlFragment"
+        android:label="@string/title_girl"
+        tools:layout="@layout/fragment_girl" />
 
     <fragment
         android:id="@+id/navigation_my"

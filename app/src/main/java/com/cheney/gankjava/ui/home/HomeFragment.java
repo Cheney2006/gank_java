@@ -42,7 +42,7 @@ public class HomeFragment extends DaggerFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.toolbar.myToolbar.setTitle(getString(R.string.title_home));
+        binding.toolbar.myToolbar.setTitle(R.string.title_home);
 
         HomeAdapter adapter = new HomeAdapter(getViewLifecycleOwner());
         binding.hotRv.setAdapter(adapter);
