@@ -48,7 +48,7 @@ public class GankRepository {
      *
      * @return
      */
-    private Single<List<Gank>> getHotGanks() {
+    public Single<List<Gank>> getHotGanks() {
         return apiService.getHot(Constants.Api.HOT_VIEWS, Constants.Api.CATEGORY_Article, 20).map(result -> {
             if (result.isOk()) {
                 return result.getData();
@@ -58,21 +58,6 @@ public class GankRepository {
         }).subscribeOn(Schedulers.io());
     }
 
-    /**
-     * 取得首页数据
-     *
-     * @return
-     */
-    public Single<List<HomeItem>> getHomeGanks() {
-        return Single.zip(getBanner(), getHotGanks(), (gankBanners, ganks) -> {
-            List<HomeItem> homeItems = new ArrayList<>();
-            homeItems.add(new HomeItem(gankBanners));
-            for (Gank gank : ganks) {
-                homeItems.add(new HomeItem(gank));
-            }
-            return homeItems;
-        });
-    }
 
 
     /**

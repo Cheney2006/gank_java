@@ -33,7 +33,7 @@ public class GirlViewModel extends ViewModel {
                 .setEnablePlaceholders(false)
                 .setInitialLoadSizeHint(20)
                 .setPageSize(20)
-                .setPrefetchDistance(5)
+                .setPrefetchDistance(2)
                 .build();
         pagedListLiveData = new LivePagedListBuilder<>(factory, config).build();
 

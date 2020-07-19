@@ -23,6 +23,7 @@ public class GirlDataSourceFactory extends DataSource.Factory<Integer, Gank> {
     @NonNull
     @Override
     public DataSource<Integer, Gank> create() {
+        //没有重新创建，invalidate没有生效
         dataSourceMutableLiveData.postValue(dataSource);
         return dataSource;
     }
