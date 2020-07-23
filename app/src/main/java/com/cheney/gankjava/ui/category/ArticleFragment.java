@@ -10,14 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
+import com.cheney.gankjava.MainNavigationDirections;
 import com.cheney.gankjava.R;
 import com.cheney.gankjava.bean.CategoryType;
-import com.cheney.gankjava.bean.Gank;
 import com.cheney.gankjava.databinding.FragmentArticleBinding;
-import com.cheney.gankjava.ui.home.GankItemClickCallback;
-import com.cheney.gankjava.ui.web.WebViewActivity;
 
 import javax.inject.Inject;
 
@@ -59,7 +59,11 @@ public class ArticleFragment extends DaggerFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        adapter = new ArticleAdapter((view, gank) -> WebViewActivity.startWebView(requireContext(), gank.getTitle(), gank.getUrl()));
+        adapter = new ArticleAdapter((view, gank) -> {
+            NavDirections navDirections = MainNavigationDirections.actionToWebViewFragment(gank.getTitle(), gank.getUrl());
+//            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
+            Navigation.findNavController(view).navigate(navDirections);
+        });
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 

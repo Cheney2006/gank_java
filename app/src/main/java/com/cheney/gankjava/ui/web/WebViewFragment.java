@@ -14,9 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.cheney.gankjava.R;
 import com.cheney.gankjava.databinding.FragmentWebviewBinding;
+import com.cheney.gankjava.util.StatusBarUtil;
 
 import javax.inject.Inject;
 
@@ -31,13 +33,6 @@ public class WebViewFragment extends DaggerFragment {
 
     private FragmentWebviewBinding binding;
 
-    private String title;
-    private String url;
-
-    public WebViewFragment(String title, String url) {
-        this.title=title;
-        this.url = url;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,11 +68,12 @@ public class WebViewFragment extends DaggerFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        StatusBarUtil.setToolbarWithStatusBar(requireContext(),binding.toolbarLayout.toolbar);
         binding.toolbarLayout.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24);
-        binding.toolbarLayout.toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
-//        String title = WebViewFragmentArgs.fromBundle(getArguments()).getTitle();
+        binding.toolbarLayout.toolbar.setNavigationOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+        String title = WebViewFragmentArgs.fromBundle(getArguments()).getTitle();
         binding.toolbarLayout.toolbar.setTitle(title);
-//        String url = WebViewFragmentArgs.fromBundle(getArguments()).getUrl();
+        String url = WebViewFragmentArgs.fromBundle(getArguments()).getUrl();
         if (!TextUtils.isEmpty(url)) {
             binding.webView.loadUrl(url);
         }

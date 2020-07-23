@@ -11,15 +11,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
-import com.cheney.gankjava.MobileNavigationDirections;
+import com.cheney.gankjava.MainNavigationDirections;
 import com.cheney.gankjava.R;
-import com.cheney.gankjava.bean.Gank;
-import com.cheney.gankjava.bean.GankBanner;
 import com.cheney.gankjava.databinding.FragmentHomeBinding;
-import com.cheney.gankjava.ui.web.WebViewActivity;
 import com.cheney.gankjava.util.StatusBarUtil;
 import com.youth.banner.config.IndicatorConfig;
 import com.youth.banner.indicator.CircleIndicator;
@@ -75,22 +71,31 @@ public class HomeFragment extends DaggerFragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         StatusBarUtil.setToolbarWithStatusBar(requireContext(), binding.toolbarLayout.toolbar);
 
         HomeAdapter adapter = new HomeAdapter((view, gank) -> {
-//            NavDirections navDirections = MobileNavigationDirections.actionToWebViewFragment(gank.getTitle(), gank.getUrl());
-////            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
-//            Navigation.findNavController(view).navigate(navDirections);
-            WebViewActivity.startWebView(requireContext(), gank.getTitle(), gank.getUrl());
+            NavDirections navDirections = MainNavigationDirections.actionToWebViewFragment(gank.getTitle(), gank.getUrl());
+//            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
+            Navigation.findNavController(view).navigate(navDirections);
+//            WebViewActivity.startWebView(requireContext(), gank.getTitle(), gank.getUrl());
         });
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         homeViewModel.banners.observe(getViewLifecycleOwner(), gankBanners -> binding.banner.addBannerLifecycleObserver(getViewLifecycleOwner())//添加生命周期观察者
-                .setAdapter(new HomeBannerAdapter(gankBanners, (view, gankBanner) -> WebViewActivity.startWebView(requireContext(), gankBanner.getTitle(), gankBanner.getUrl())))
+                .setAdapter(new HomeBannerAdapter(gankBanners, (view, gankBanner) -> {
+                    NavDirections navDirections = MainNavigationDirections.actionToWebViewFragment(gankBanner.getTitle(), gankBanner.getUrl());
+//            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
+                    Navigation.findNavController(view).navigate(navDirections);
+                }))
                 .setIndicator(new CircleIndicator(requireContext()))
                 .setIndicatorGravity(IndicatorConfig.Direction.RIGHT)
                 .start());
