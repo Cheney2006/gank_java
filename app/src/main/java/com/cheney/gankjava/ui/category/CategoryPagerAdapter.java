@@ -2,6 +2,7 @@ package com.cheney.gankjava.ui.category;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentFactory;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.cheney.gankjava.bean.CategoryType;
@@ -17,9 +18,11 @@ public class CategoryPagerAdapter extends FragmentStateAdapter {
         this.categoryTypes = categoryTypes;
     }
 
+
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        new FragmentFactory();
         return ArticleFragment.newInstance(categoryTypes.get(position));
     }
 

@@ -8,18 +8,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
+import com.cheney.gankjava.MobileNavigationDirections;
 import com.cheney.gankjava.R;
+import com.cheney.gankjava.bean.Gank;
 import com.cheney.gankjava.bean.GankBanner;
 import com.cheney.gankjava.databinding.FragmentHomeBinding;
-import com.google.android.material.appbar.AppBarLayout;
+import com.cheney.gankjava.ui.web.WebViewActivity;
+import com.cheney.gankjava.util.StatusBarUtil;
 import com.youth.banner.config.IndicatorConfig;
 import com.youth.banner.indicator.CircleIndicator;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -44,14 +47,29 @@ public class HomeFragment extends DaggerFragment {
         binding.setLifecycleOwner(this);
         binding.setViewModel(homeViewModel);
 
+//        ((MainActivity) requireActivity()).setSupportActionBar(binding.toolbar.myToolbar);
+
         binding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+//            System.out.println("verticalOffset=" + verticalOffset + ",appBarLayout.getTotalScrollRange()=" + appBarLayout.getTotalScrollRange());
             if (verticalOffset >= 0) {
+                //当滑动到顶部的时候开启
                 binding.swipeRefresh.setEnabled(true);
             } else {
+                //否则关闭
                 binding.swipeRefresh.setEnabled(false);
             }
-        });
 
+            if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
+                //或者toolbar不设置背景，或者背景设为透明,这里通过控制显示隐藏来处理
+                binding.toolbarLayout.toolbar.setVisibility(View.VISIBLE);
+                //CollapsingToolbarLayout 中的 title 覆盖了 Toolbar 中的 title
+                binding.collapsingToolbarLayout.setTitle(getString(R.string.title_home));
+//                binding.toolbar.myToolbar.setTitle(R.string.title_home);
+            } else {
+                binding.toolbarLayout.toolbar.setVisibility(View.GONE);
+                binding.collapsingToolbarLayout.setTitle("");
+            }
+        });
 
         return binding.getRoot();
     }
@@ -59,24 +77,27 @@ public class HomeFragment extends DaggerFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        binding.toolbar.myToolbar.setTitle(R.string.title_home);
 
-        HomeAdapter adapter = new HomeAdapter();
+        StatusBarUtil.setToolbarWithStatusBar(requireContext(), binding.toolbarLayout.toolbar);
+
+        HomeAdapter adapter = new HomeAdapter((view, gank) -> {
+//            NavDirections navDirections = MobileNavigationDirections.actionToWebViewFragment(gank.getTitle(), gank.getUrl());
+////            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
+//            Navigation.findNavController(view).navigate(navDirections);
+            WebViewActivity.startWebView(requireContext(), gank.getTitle(), gank.getUrl());
+        });
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-        homeViewModel.banners.observe(getViewLifecycleOwner(), new Observer<List<GankBanner>>() {
-            @Override
-            public void onChanged(List<GankBanner> gankBanners) {
-                binding.banner.addBannerLifecycleObserver(getViewLifecycleOwner())//添加生命周期观察者
-                        .setAdapter(new HomeBannerAdapter(gankBanners))
-                        .setIndicator(new CircleIndicator(requireContext()))
-                        .setIndicatorGravity(IndicatorConfig.Direction.RIGHT)
-                        .start();
-            }
-        });
+        homeViewModel.banners.observe(getViewLifecycleOwner(), gankBanners -> binding.banner.addBannerLifecycleObserver(getViewLifecycleOwner())//添加生命周期观察者
+                .setAdapter(new HomeBannerAdapter(gankBanners, (view, gankBanner) -> WebViewActivity.startWebView(requireContext(), gankBanner.getTitle(), gankBanner.getUrl())))
+                .setIndicator(new CircleIndicator(requireContext()))
+                .setIndicatorGravity(IndicatorConfig.Direction.RIGHT)
+                .start());
         homeViewModel.ganks.observe(getViewLifecycleOwner(), ganks -> {
             adapter.submitList(ganks);
         });
     }
+
+
 }

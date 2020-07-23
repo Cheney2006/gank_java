@@ -15,8 +15,9 @@ import com.cheney.gankjava.databinding.ItemGankBinding;
 
 public class HomeAdapter extends ListAdapter<Gank, HomeAdapter.GankVH> {
 
+    private GankItemClickCallback itemClickCallback;
 
-    public HomeAdapter() {
+    public HomeAdapter(GankItemClickCallback itemClickCallback) {
         super(new DiffUtil.ItemCallback<Gank>() {
             @Override
             public boolean areItemsTheSame(@NonNull Gank oldItem, @NonNull Gank newItem) {
@@ -28,6 +29,7 @@ public class HomeAdapter extends ListAdapter<Gank, HomeAdapter.GankVH> {
                 return oldItem.equals(newItem);
             }
         });
+        this.itemClickCallback = itemClickCallback;
     }
 
     @NonNull
@@ -40,6 +42,7 @@ public class HomeAdapter extends ListAdapter<Gank, HomeAdapter.GankVH> {
     public void onBindViewHolder(@NonNull HomeAdapter.GankVH holder, int position) {
         holder.binding.setGank(getItem(position));
         holder.binding.executePendingBindings();
+        holder.binding.setItemClick(itemClickCallback);
     }
 
 

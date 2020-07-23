@@ -4,34 +4,60 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.cheney.gankjava.R;
+import com.cheney.gankjava.constants.Constants;
+import com.cheney.gankjava.databinding.FragmentMyBinding;
+import com.cheney.gankjava.util.StatusBarUtil;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.android.support.DaggerFragment;
 
 
 public class MyFragment extends DaggerFragment {
 
-    private MyViewModel homeViewModel;
+    @Inject
+    ViewModelProvider.Factory factory;
 
+    @Inject
+    @Named(Constants.NamedKey.VERSION_NAME)
+    String versionName;
+
+    private MyViewModel viewModel;
+
+    private FragmentMyBinding binding;
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(MyViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_my, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+        viewModel = new ViewModelProvider(this, factory).get(MyViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
+        binding.setVersionName(versionName);
+        binding.setEventHandler(new EventHandlers());
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        StatusBarUtil.setToolbarWithStatusBar(requireContext(), binding.toolbarLayout.toolbar);
+        binding.toolbarLayout.toolbar.setTitle(R.string.title_my);
+
+    }
+
+    public class EventHandlers{
+        public void login() {
+
+        }
     }
 }

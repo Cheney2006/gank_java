@@ -8,26 +8,21 @@ import com.cheney.gankjava.bean.Gank;
 import com.cheney.gankjava.constants.Constants;
 import com.cheney.gankjava.repository.GankRepository;
 
-import javax.inject.Inject;
-
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 public class GirlDataSource extends ItemKeyedDataSource<Integer, Gank> {
 
-    private int pageNo = 1;
-    private final GankRepository repository;
 
     public MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    public MutableLiveData<Boolean> canLoadMore = new MutableLiveData<>();
     public MutableLiveData<Throwable> error = new MutableLiveData<>();
+    private final GankRepository repository;
+    private final CompositeDisposable compositeDisposable;
+    private int pageNo = 1;
 
-    @Inject
-    CompositeDisposable compositeDisposable;
-
-    @Inject
-    public GirlDataSource(GankRepository repository) {
+    public GirlDataSource(GankRepository repository, CompositeDisposable compositeDisposable) {
         this.repository = repository;
+        this.compositeDisposable = compositeDisposable;
     }
 
     @Override
@@ -35,10 +30,15 @@ public class GirlDataSource extends ItemKeyedDataSource<Integer, Gank> {
         isLoading.postValue(true);
         repository.getByCategoryType(Constants.Api.CATEGORY_Girl, Constants.Api.CATEGORY_Girl, params.requestedLoadSize, pageNo)
                 .doOnSubscribe(disposable -> compositeDisposable.add(disposable))
-                .subscribe(ganks -> {
+                .subscribe(result -> {
                     isLoading.postValue(false);
-                    pageNo++;
-                    callback.onResult(ganks);
+                    if (result.getPage_count() > result.getPage()) {
+                        pageNo++;
+                        canLoadMore.postValue(true);
+                    } else {
+                        canLoadMore.postValue(false);
+                    }
+                    callback.onResult(result.getData());
                 }, throwable -> {
                     isLoading.postValue(false);
                     error.postValue(throwable);
@@ -47,10 +47,20 @@ public class GirlDataSource extends ItemKeyedDataSource<Integer, Gank> {
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Gank> callback) {
-        repository.getByCategoryType(Constants.Api.CATEGORY_Girl, Constants.Api.CATEGORY_Girl, params.requestedLoadSize, params.key).doOnSubscribe(disposable -> compositeDisposable.add(disposable)).subscribe(ganks -> {
-            pageNo++;
-            callback.onResult(ganks);
-        }, throwable -> error.postValue(throwable));
+        if (canLoadMore.getValue() == null || !canLoadMore.getValue()) {
+            return;
+        }
+        repository.getByCategoryType(Constants.Api.CATEGORY_Girl, Constants.Api.CATEGORY_Girl, params.requestedLoadSize, params.key)
+                .doOnSubscribe(disposable -> compositeDisposable.add(disposable))
+                .subscribe(result -> {
+                    if (result.getPage_count() > result.getPage()) {
+                        pageNo++;
+                        canLoadMore.postValue(true);
+                    } else {
+                        canLoadMore.postValue(false);
+                    }
+                    callback.onResult(result.getData());
+                }, throwable -> error.postValue(throwable));
     }
 
     @Override
@@ -65,7 +75,7 @@ public class GirlDataSource extends ItemKeyedDataSource<Integer, Gank> {
     }
 
 
-    public void onCleared(){
+    public void onCleared() {
         compositeDisposable.clear();
     }
 }

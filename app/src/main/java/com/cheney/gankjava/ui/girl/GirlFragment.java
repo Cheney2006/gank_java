@@ -15,6 +15,7 @@ import androidx.paging.PagedList;
 import com.cheney.gankjava.R;
 import com.cheney.gankjava.bean.Gank;
 import com.cheney.gankjava.databinding.FragmentGirlBinding;
+import com.cheney.gankjava.util.StatusBarUtil;
 
 import javax.inject.Inject;
 
@@ -51,7 +52,8 @@ public class GirlFragment extends DaggerFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.toolbar.myToolbar.setTitle(R.string.title_girl);
+        StatusBarUtil.setToolbarWithStatusBar(requireContext(),binding.toolbarLayout.toolbar);
+        binding.toolbarLayout.toolbar.setTitle(R.string.title_girl);
 
         adapter = new GirlAdapter();
         binding.recyclerView.setAdapter(adapter);

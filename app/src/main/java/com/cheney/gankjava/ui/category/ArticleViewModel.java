@@ -37,7 +37,13 @@ public class ArticleViewModel extends ViewModel {
     }
 
     private void initPaging() {
-        PagedList.Config config = new PagedList.Config.Builder().setEnablePlaceholders(false).setPageSize(10).setInitialLoadSizeHint(10).setPrefetchDistance(2).build();
+        //在不足一页时，会自动加载下一页，可控件loadAfter。。。。
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setPageSize(10)
+                .setInitialLoadSizeHint(10)
+                .setPrefetchDistance(2)
+                .build();
         pagedListLiveData = new LivePagedListBuilder<>(factory, config).build();
 
         isLoading = Transformations.switchMap(factory.getDataSourceMutableLiveData(), dataSource -> dataSource.getIsLoading());

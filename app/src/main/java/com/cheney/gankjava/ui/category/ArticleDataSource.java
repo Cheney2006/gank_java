@@ -8,6 +8,7 @@ import androidx.paging.ItemKeyedDataSource;
 
 import com.cheney.gankjava.bean.CategoryType;
 import com.cheney.gankjava.bean.Gank;
+import com.cheney.gankjava.bean.Result;
 import com.cheney.gankjava.constants.Constants;
 import com.cheney.gankjava.repository.GankRepository;
 
@@ -31,6 +32,7 @@ public class ArticleDataSource extends ItemKeyedDataSource<Integer, Gank> {
 
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
+    public MutableLiveData<Boolean> canLoadMore = new MutableLiveData<>();
 
     //    @Inject
     public ArticleDataSource(GankRepository repository, CategoryType categoryType, CompositeDisposable compositeDisposable) {
@@ -45,28 +47,41 @@ public class ArticleDataSource extends ItemKeyedDataSource<Integer, Gank> {
         isLoading.postValue(true);
         repository.getByCategoryType(Constants.Api.CATEGORY_Article, categoryType.getType(), params.requestedLoadSize, pageNo)
                 .doOnSubscribe(disposable -> compositeDisposable.add(disposable))
-                .subscribe(ganks -> onSuccess(callback, ganks), throwable -> {
+                .subscribe(result -> onSuccess(callback, result), throwable -> {
                     error.postValue(throwable);
                     isLoading.postValue(false);
                 });
     }
 
-    private void onSuccess(@NonNull LoadInitialCallback<Gank> callback, List<Gank> ganks) {
+    private void onSuccess(@NonNull LoadInitialCallback<Gank> callback, Result<List<Gank>> result) {
         isLoading.postValue(false);
-        pageNo++;
-        callback.onResult(ganks);
+        if (result.getPage_count() > result.getPage()) {
+            pageNo++;
+            canLoadMore.postValue(true);
+        }else{
+            canLoadMore.postValue(false);
+        }
+        callback.onResult(result.getData());
     }
 
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Gank> callback) {
+        if (canLoadMore.getValue() == null || !canLoadMore.getValue()) {
+            return;
+        }
         Log.d(TAG, "Fetching next page:" + pageNo);
         Log.d(TAG, "Fetching next page params key:" + params.key + ",requestedLoadSize=" + params.requestedLoadSize);
         repository.getByCategoryType(Constants.Api.CATEGORY_Article, categoryType.getType(), params.requestedLoadSize, params.key)
                 .doOnSubscribe(disposable -> compositeDisposable.add(disposable))
-                .subscribe(ganks -> {
-                    pageNo++;
-                    callback.onResult(ganks);
+                .subscribe(result -> {
+                    if (result.getPage_count() > result.getPage()) {
+                        pageNo++;
+                        canLoadMore.postValue(true);
+                    }else{
+                        canLoadMore.postValue(false);
+                    }
+                    callback.onResult(result.getData());
                 }, this::onError);
     }
 

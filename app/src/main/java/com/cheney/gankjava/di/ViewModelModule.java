@@ -7,6 +7,8 @@ import com.cheney.gankjava.ui.category.ArticleViewModel;
 import com.cheney.gankjava.ui.category.CategoryViewModel;
 import com.cheney.gankjava.ui.home.HomeViewModel;
 import com.cheney.gankjava.ui.girl.GirlViewModel;
+import com.cheney.gankjava.ui.my.MyViewModel;
+import com.cheney.gankjava.ui.web.WebViewViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -36,8 +38,13 @@ public abstract class ViewModelModule {
     @ViewModelKey(GirlViewModel.class)
     abstract ViewModel bindGirlViewModel(GirlViewModel girlViewModel);
 
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(MyViewModel.class)
-//    abstract ViewModel bindMyViewModel(MyViewModel myViewModel);
+    @Binds
+    @IntoMap
+    @ViewModelKey(MyViewModel.class)
+    abstract ViewModel bindMyViewModel(MyViewModel myViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WebViewViewModel.class)
+    abstract ViewModel bindWebViewViewModel(WebViewViewModel webViewViewModel);
 }

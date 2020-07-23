@@ -4,4 +4,29 @@
     <string name="title_category">分类</string>
     <string name="title_girl">妹子</string>
     <string name="title_my">我的</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="about">关于</string>
+    <string name="issue_pr">提Issue/PR</string>
+    <string name="star">点个Star</string>
+    <string name="clean">清理缓存</string>
+    <string name="clean_favorites">清理收藏</string>
+    <string name="github_login">GitHub帐号登录</string>
+
+    <string name="versionName">当前版本V%1$s</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
