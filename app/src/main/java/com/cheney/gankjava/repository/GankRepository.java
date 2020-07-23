@@ -5,6 +5,7 @@ import com.cheney.gankjava.bean.CategoryType;
 import com.cheney.gankjava.bean.Gank;
 import com.cheney.gankjava.bean.GankBanner;
 import com.cheney.gankjava.bean.HomeItem;
+import com.cheney.gankjava.bean.Result;
 import com.cheney.gankjava.constants.Constants;
 
 import java.io.IOException;
@@ -84,10 +85,10 @@ public class GankRepository {
      * @param page     >=1
      * @return
      */
-    public Single<List<Gank>> getByCategoryType(String category, String type, int count, int page) {
+    public Single<Result<List<Gank>>> getByCategoryType(String category, String type, int count, int page) {
         return apiService.getByCategoryType(category, type, count, page).map(result -> {
             if (result.isOk()) {
-                return result.getData();
+                return result;
             } else {
                 throw new IOException("Get Error From Server");
             }

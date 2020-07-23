@@ -8,8 +8,11 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import com.cheney.gankjava.bean.Gank;
+import com.cheney.gankjava.repository.GankRepository;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class GirlViewModel extends ViewModel {
 
@@ -18,13 +21,16 @@ public class GirlViewModel extends ViewModel {
      */
     private GirlDataSourceFactory factory;
 
+    private CompositeDisposable disposable;
+
     public LiveData<Boolean> isLoading = new MutableLiveData<>();
     public LiveData<Throwable> error = new MutableLiveData<>();
     public LiveData<PagedList<Gank>> pagedListLiveData;
 
     @Inject
-    public GirlViewModel(GirlDataSourceFactory factory) {
-        this.factory = factory;
+    public GirlViewModel(GankRepository repository) {
+        disposable = new CompositeDisposable();
+        this.factory = new GirlDataSourceFactory(repository, disposable);
         initPaging();
     }
 

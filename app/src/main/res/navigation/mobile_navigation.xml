@@ -18,7 +18,7 @@
         tools:layout="@layout/fragment_category" />
 
     <fragment
-        android:id="@+id/navigation_sister"
+        android:id="@+id/navigation_girl"
         android:name="com.cheney.gankjava.ui.girl.GirlFragment"
         android:label="@string/title_girl"
         tools:layout="@layout/fragment_girl" />
@@ -28,4 +28,20 @@
         android:name="com.cheney.gankjava.ui.my.MyFragment"
         android:label="@string/title_my"
         tools:layout="@layout/fragment_my" />
+
+    <action
+        android:id="@+id/action_to_webViewFragment"
+        app:destination="@id/webViewFragment"/>
+
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.cheney.gankjava.ui.web.WebViewFragment"
+        android:label="WebViewFragment">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
 </navigation>

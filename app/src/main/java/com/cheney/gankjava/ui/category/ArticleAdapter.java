@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cheney.gankjava.R;
 import com.cheney.gankjava.bean.Gank;
 import com.cheney.gankjava.databinding.ItemGankBinding;
+import com.cheney.gankjava.ui.home.GankItemClickCallback;
 
 public class ArticleAdapter extends PagedListAdapter<Gank, ArticleAdapter.GankVH> {
 
+    private GankItemClickCallback itemClickCallback;
 
-    public ArticleAdapter() {
+    public ArticleAdapter(GankItemClickCallback itemClickCallback) {
         super(new DiffUtil.ItemCallback<Gank>() {
             @Override
             public boolean areItemsTheSame(@NonNull Gank oldItem, @NonNull Gank newItem) {
@@ -28,6 +30,7 @@ public class ArticleAdapter extends PagedListAdapter<Gank, ArticleAdapter.GankVH
                 return oldItem.equals(newItem);
             }
         });
+        this.itemClickCallback = itemClickCallback;
     }
 
     @NonNull
@@ -39,6 +42,7 @@ public class ArticleAdapter extends PagedListAdapter<Gank, ArticleAdapter.GankVH
     @Override
     public void onBindViewHolder(@NonNull GankVH holder, int position) {
         holder.binding.setGank(getItem(position));
+        holder.binding.setItemClick(itemClickCallback);
         holder.binding.executePendingBindings();
     }
 

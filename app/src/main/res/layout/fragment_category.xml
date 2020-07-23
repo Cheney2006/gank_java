@@ -12,11 +12,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.cheney.gankjava.ui.category.CategoryFragment">
+        android:layout_height="match_parent">
 
         <include
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar_layout"
             layout="@layout/layout_toolbar" />
 
         <com.cheney.gankjava.widget.CustomTabLayout
@@ -24,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_layout"
             app:tabBackground="@color/colorPrimary"
             app:tabMode="scrollable"
             app:tabTextColor="@color/colorWhite" />

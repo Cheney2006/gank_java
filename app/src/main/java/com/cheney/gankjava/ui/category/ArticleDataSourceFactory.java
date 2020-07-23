@@ -14,14 +14,6 @@ public class ArticleDataSourceFactory extends DataSource.Factory<Integer, Gank> 
 
     private MutableLiveData<ArticleDataSource> dataSourceMutableLiveData;
 
-//    private final GankDataSource dataSource;
-
-//    @Inject
-//    public GankDataSourceFactory(GankDataSource dataSource) {
-//        this.dataSource = dataSource;
-//        dataSourceMutableLiveData = new MutableLiveData<>();
-//    }
-
     private final GankRepository repository;
 
     private final CategoryType categoryType;
