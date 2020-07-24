@@ -38,11 +38,19 @@
         android:id="@+id/myFragment"
         android:name="com.cheney.gankjava.ui.my.MyFragment"
         android:label="@string/title_my"
-        tools:layout="@layout/fragment_my" />
+        tools:layout="@layout/fragment_my" >
+        <action
+            android:id="@+id/action_myFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
     <action
         android:id="@+id/action_to_webViewFragment"
-        app:destination="@id/webViewFragment" />
+        app:destination="@id/webViewFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
 
     <fragment
         android:id="@+id/webViewFragment"
@@ -55,4 +63,9 @@
             android:name="url"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.cheney.gankjava.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
 </navigation>

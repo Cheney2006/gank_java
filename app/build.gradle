@@ -54,6 +54,7 @@ dependencies {
     implementation deps.paging.paging
     implementation deps.paging.paging_rxjava
     implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.annotation:annotation:1.1.0'
 
 
     // databinding

@@ -34,10 +34,15 @@ public class Constants {
          */
         public static String CATEGORY_Article = "Article";
 
+
+
+
     }
 
 
     public final static class NamedKey {
+        public static final String RETROFIT_GITHUB = "githubRetrofi";
+        public static final String RETROFIT_GANK = "gankRetrofi";
         public static final String PACKAGE_NAME = "packageName";
         public static final String VERSION_NAME = "versionName";
         public static final String VERSION_CODE = "versionCode";

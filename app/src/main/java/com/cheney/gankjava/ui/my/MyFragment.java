@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.cheney.gankjava.R;
 import com.cheney.gankjava.constants.Constants;
@@ -56,8 +58,8 @@ public class MyFragment extends DaggerFragment {
     }
 
     public class EventHandlers{
-        public void login() {
-
+        public void login(View view) {
+            Navigation.findNavController(view).navigate(R.id.action_myFragment_to_loginFragment);
         }
     }
 }

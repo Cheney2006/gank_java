@@ -40,7 +40,7 @@
             android:id="@+id/login_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{()->eventHandler.login()}"
+            android:onClick="@{(view)->eventHandler.login(view)}"
             android:padding="16dp"
             android:background="@drawable/selector_item"
             app:layout_constraintLeft_toLeftOf="parent"

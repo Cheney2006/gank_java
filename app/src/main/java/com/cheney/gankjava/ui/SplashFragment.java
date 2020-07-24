@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -16,16 +17,9 @@ import com.cheney.gankjava.R;
 
 public class SplashFragment extends Fragment {
 
-    public static final int DELAY_MILLIS = 3000;
-
-
-    private Handler handler;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        handler = new Handler();
-    }
+    public static final int MILLIS_IN_FUTURE = 3000;
+    public static final int COUNT_DOWN_INTERVAL = 1000;
+    CountDownTimer timer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,20 +28,33 @@ public class SplashFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        timer = new CountDownTimer(MILLIS_IN_FUTURE, COUNT_DOWN_INTERVAL) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                Navigation.findNavController(view).navigateUp();
+            }
+        }.start();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        handler.postDelayed(() -> {
-//            Navigation.findNavController(requireActivity(), R.id.nav_mobile_fragment).navigateUp();
-            NavHostFragment.findNavController(this).navigateUp();
-//            NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_splashFragment);
-        }, DELAY_MILLIS);
-//        new CountDownTimer(3000,1000).seto.start();
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
+        if (timer != null) {
+            timer.cancel();
+        }
 
     }
 }
