@@ -25,7 +25,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login() {
-        repository.getAccessToken("chen","123").subscribe(response -> {
+        repository.getAccessToken("cy20061121@163.com","cy2006112134").subscribe(response -> {
             System.out.println(response.toString());
         });
     }
