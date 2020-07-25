@@ -11,10 +11,15 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavHostController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.cheney.gankjava.R;
 import com.cheney.gankjava.databinding.FragmentLoginBinding;
+import com.cheney.gankjava.util.StatusBarUtil;
 
 import javax.inject.Inject;
 
@@ -45,14 +50,28 @@ public class LoginFragment extends DaggerFragment {
         loginViewModel = new ViewModelProvider(this, factory).get(LoginViewModel.class);
         binding.setViewModel(loginViewModel);
 
+        binding.toolbarLayout.toolbar.setTitle(R.string.title_login);
+        StatusBarUtil.setToolbarWithStatusBar(requireContext(),binding.toolbarLayout.toolbar);
+
         final EditText usernameEditText = view.findViewById(R.id.username);
         final EditText passwordEditText = view.findViewById(R.id.password);
         final Button loginButton = view.findViewById(R.id.login);
 
-        loginViewModel.login();
     }
 
-//        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        loginViewModel.error.observe(getViewLifecycleOwner(), new Observer<Throwable>() {
+            @Override
+            public void onChanged(Throwable throwable) {
+//                Navigation.findNavController();
+                NavHostFragment.findNavController(getParentFragment()).navigateUp();
+            }
+        });
+    }
+
+    //        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
 //            @Override
 //            public void onChanged(@Nullable LoginFormState loginFormState) {
 //                if (loginFormState == null) {
