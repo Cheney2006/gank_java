@@ -3,6 +3,7 @@ package com.cheney.gankjava.di;
 import androidx.lifecycle.ViewModel;
 
 import com.cheney.gankjava.base.di.ViewModelKey;
+import com.cheney.gankjava.ui.SessionViewModel;
 import com.cheney.gankjava.ui.category.ArticleViewModel;
 import com.cheney.gankjava.ui.category.CategoryViewModel;
 import com.cheney.gankjava.ui.home.HomeViewModel;
@@ -17,6 +18,11 @@ import dagger.multibindings.IntoMap;
 
 @Module
 public abstract class ViewModelModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SessionViewModel.class)
+    abstract ViewModel bindSessionViewModel(SessionViewModel sessionViewModel);
 
     @Binds
     @IntoMap

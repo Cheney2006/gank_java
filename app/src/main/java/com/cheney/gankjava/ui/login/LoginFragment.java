@@ -18,7 +18,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.cheney.gankjava.R;
+import com.cheney.gankjava.bean.Progress;
+import com.cheney.gankjava.bean.User;
 import com.cheney.gankjava.databinding.FragmentLoginBinding;
+import com.cheney.gankjava.dialog.ProgressFragment;
+import com.cheney.gankjava.ui.SessionViewModel;
 import com.cheney.gankjava.util.StatusBarUtil;
 
 import javax.inject.Inject;
@@ -30,9 +34,17 @@ public class LoginFragment extends DaggerFragment {
     @Inject
     ViewModelProvider.Factory factory;
 
+    private SessionViewModel sessionViewModel;
+
     private LoginViewModel loginViewModel;
 
     private FragmentLoginBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sessionViewModel =new ViewModelProvider(requireActivity(),factory).get(SessionViewModel.class);
+    }
 
     @Nullable
     @Override
@@ -62,6 +74,27 @@ public class LoginFragment extends DaggerFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        loginViewModel.progressMutableLiveData.observe(getViewLifecycleOwner(), new Observer<Progress>() {
+            @Override
+            public void onChanged(Progress progress) {
+                ProgressFragment progressFragment= null;
+                if(progress.isFinished()&&progressFragment!=null){
+                    progressFragment.dismissAllowingStateLoss();
+                }else{
+                    if(progressFragment==null){
+                        progressFragment= new ProgressFragment();
+                        progressFragment.showNow(getParentFragmentManager(),"progress");
+                    }
+                }
+            }
+        });
+        loginViewModel.userInfo.observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                sessionViewModel.userInfo.postValue(user);
+            }
+        });
         loginViewModel.error.observe(getViewLifecycleOwner(), new Observer<Throwable>() {
             @Override
             public void onChanged(Throwable throwable) {
@@ -71,93 +104,4 @@ public class LoginFragment extends DaggerFragment {
         });
     }
 
-    //        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-//            @Override
-//            public void onChanged(@Nullable LoginFormState loginFormState) {
-//                if (loginFormState == null) {
-//                    return;
-//                }
-//                loginButton.setEnabled(loginFormState.isDataValid());
-//                if (loginFormState.getUsernameError() != null) {
-//                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-//                }
-//                if (loginFormState.getPasswordError() != null) {
-//                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-//                }
-//            }
-//        });
-//
-//        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-//            @Override
-//            public void onChanged(@Nullable LoginResult loginResult) {
-//                if (loginResult == null) {
-//                    return;
-//                }
-//                loadingProgressBar.setVisibility(View.GONE);
-//                if (loginResult.getError() != null) {
-//                    showLoginFailed(loginResult.getError());
-//                }
-//                if (loginResult.getSuccess() != null) {
-//                    updateUiWithUser(loginResult.getSuccess());
-//                }
-//            }
-//        });
-//
-//        TextWatcher afterTextChangedListener = new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                // ignore
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                // ignore
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-//                        passwordEditText.getText().toString());
-//            }
-//        };
-//        usernameEditText.addTextChangedListener(afterTextChangedListener);
-//        passwordEditText.addTextChangedListener(afterTextChangedListener);
-//        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                    loginViewModel.login(usernameEditText.getText().toString(),
-//                            passwordEditText.getText().toString());
-//                }
-//                return false;
-//            }
-//        });
-//
-//        loginButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                loadingProgressBar.setVisibility(View.VISIBLE);
-//                loginViewModel.login(usernameEditText.getText().toString(),
-//                        passwordEditText.getText().toString());
-//            }
-//        });
-//    }
-//
-//    private void updateUiWithUser(LoggedInUserView model) {
-//        String welcome = getString(R.string.welcome) + model.getDisplayName();
-//        // TODO : initiate successful logged in experience
-//        if (getContext() != null && getContext().getApplicationContext() != null) {
-//            Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-//        }
-//    }
-//
-//    private void showLoginFailed(@StringRes Integer errorString) {
-//        if (getContext() != null && getContext().getApplicationContext() != null) {
-//            Toast.makeText(
-//                    getContext().getApplicationContext(),
-//                    errorString,
-//                    Toast.LENGTH_LONG).show();
-//        }
-//    }
 }
