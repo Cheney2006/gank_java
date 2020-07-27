@@ -8,13 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentResultListener;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.cheney.gankjava.R;
+import com.cheney.gankjava.bean.User;
 import com.cheney.gankjava.constants.Constants;
 import com.cheney.gankjava.databinding.FragmentMyBinding;
+import com.cheney.gankjava.ui.SessionViewModel;
 import com.cheney.gankjava.util.StatusBarUtil;
 
 import javax.inject.Inject;
@@ -32,6 +36,8 @@ public class MyFragment extends DaggerFragment {
     @Named(Constants.NamedKey.VERSION_NAME)
     String versionName;
 
+    private SessionViewModel sessionViewModel;
+
     private MyViewModel viewModel;
 
     private FragmentMyBinding binding;
@@ -39,6 +45,7 @@ public class MyFragment extends DaggerFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        sessionViewModel = new ViewModelProvider(requireActivity(), factory).get(SessionViewModel.class);
         viewModel = new ViewModelProvider(this, factory).get(MyViewModel.class);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my, container, false);
         binding.setLifecycleOwner(this);
@@ -55,6 +62,17 @@ public class MyFragment extends DaggerFragment {
         StatusBarUtil.setToolbarWithStatusBar(requireContext(), binding.toolbarLayout.toolbar);
         binding.toolbarLayout.toolbar.setTitle(R.string.title_my);
 
+//        sessionViewModel.userInfo.observe(getViewLifecycleOwner(), user -> {
+//            binding.usernameTv.setText(user.getUsername());
+//        });
+
+        //通过Fragment setFragmentResultListener传递参数
+        getParentFragmentManager().setFragmentResultListener("userInfo", this, (requestKey, result) -> {
+            String username=result.getString("username");
+            if (username != null) {
+                binding.usernameTv.setText(username);
+            }
+        });
     }
 
     public class EventHandlers{

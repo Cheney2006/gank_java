@@ -3,7 +3,6 @@ package com.cheney.gankjava.ui.login;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.cheney.gankjava.bean.Progress;
 import com.cheney.gankjava.bean.User;
 import com.cheney.gankjava.repository.GitHubRepository;
 
@@ -20,7 +19,7 @@ public class LoginViewModel extends ViewModel {
 
    public MutableLiveData<User> userInfo=new MutableLiveData<User>();
 
-    public MutableLiveData<Progress> progressMutableLiveData=new MutableLiveData<Progress>();
+    public MutableLiveData<Boolean> isLoading=new MutableLiveData();
 
     @Inject
     public LoginViewModel(GitHubRepository repository) {
@@ -28,22 +27,23 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login() {
-        Progress progress=new Progress();
-        progress.setLoading("正在登录",false);
-        progressMutableLiveData.postValue(progress);
+        isLoading.postValue(true);
         repository.getAccessToken(username.getValue(),password.getValue()).subscribe(response -> {
-           progress.setFinished();
-            progressMutableLiveData.postValue(progress);
+            isLoading.postValue(false);
             System.out.println(response.toString());
             //测试使用
             User user=new User();
             user.setUsername(username.getValue());
             user.setPassword(password.getValue());
             userInfo.postValue(user);
-
         }, throwable -> {
-            progress.setFinished();
-            progressMutableLiveData.postValue(progress);
+            isLoading.postValue(false);
+            //测试使用
+            User user=new User();
+            user.setUsername(username.getValue());
+            user.setPassword(password.getValue());
+            userInfo.postValue(user);
+
             error.postValue(throwable);
         });
     }

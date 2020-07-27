@@ -4,24 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavHostController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.cheney.gankjava.R;
-import com.cheney.gankjava.bean.Progress;
+import com.cheney.gankjava.bean.ProgressBean;
 import com.cheney.gankjava.bean.User;
 import com.cheney.gankjava.databinding.FragmentLoginBinding;
-import com.cheney.gankjava.dialog.ProgressFragment;
 import com.cheney.gankjava.ui.SessionViewModel;
 import com.cheney.gankjava.util.StatusBarUtil;
 
@@ -43,7 +37,7 @@ public class LoginFragment extends DaggerFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionViewModel =new ViewModelProvider(requireActivity(),factory).get(SessionViewModel.class);
+        sessionViewModel = new ViewModelProvider(requireActivity(), factory).get(SessionViewModel.class);
     }
 
     @Nullable
@@ -63,45 +57,25 @@ public class LoginFragment extends DaggerFragment {
         binding.setViewModel(loginViewModel);
 
         binding.toolbarLayout.toolbar.setTitle(R.string.title_login);
-        StatusBarUtil.setToolbarWithStatusBar(requireContext(),binding.toolbarLayout.toolbar);
+        StatusBarUtil.setToolbarWithStatusBar(requireContext(), binding.toolbarLayout.toolbar);
 
-        final EditText usernameEditText = view.findViewById(R.id.username);
-        final EditText passwordEditText = view.findViewById(R.id.password);
-        final Button loginButton = view.findViewById(R.id.login);
+        loginViewModel.username.setValue("张三");
 
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        loginViewModel.progressMutableLiveData.observe(getViewLifecycleOwner(), new Observer<Progress>() {
-            @Override
-            public void onChanged(Progress progress) {
-                ProgressFragment progressFragment= null;
-                if(progress.isFinished()&&progressFragment!=null){
-                    progressFragment.dismissAllowingStateLoss();
-                }else{
-                    if(progressFragment==null){
-                        progressFragment= new ProgressFragment();
-                        progressFragment.showNow(getParentFragmentManager(),"progress");
-                    }
-                }
+        loginViewModel.isLoading.observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading != null && isLoading) {
+                sessionViewModel.progressLiveData.postValue(ProgressBean.create(getString(R.string.dialog_login), false));
+            } else {
+                sessionViewModel.progressLiveData.postValue(ProgressBean.finished());
             }
         });
-        loginViewModel.userInfo.observe(getViewLifecycleOwner(), new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                sessionViewModel.userInfo.postValue(user);
-            }
+
+        loginViewModel.userInfo.observe(getViewLifecycleOwner(), user -> {
+//            sessionViewModel.userInfo.postValue(user);
+            Bundle result = new Bundle();
+            result.putString("username", user.getUsername());
+            getParentFragmentManager().setFragmentResult("userInfo", result);
         });
-        loginViewModel.error.observe(getViewLifecycleOwner(), new Observer<Throwable>() {
-            @Override
-            public void onChanged(Throwable throwable) {
-//                Navigation.findNavController();
-                NavHostFragment.findNavController(getParentFragment()).navigateUp();
-            }
-        });
+        loginViewModel.error.observe(getViewLifecycleOwner(), throwable -> NavHostFragment.findNavController(this).navigateUp());
     }
 
 }
