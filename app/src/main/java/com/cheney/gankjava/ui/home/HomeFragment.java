@@ -73,15 +73,9 @@ public class HomeFragment extends DaggerFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         StatusBarUtil.setToolbarWithStatusBar(requireContext(), binding.toolbarLayout.toolbar);
 
-        HomeAdapter adapter = new HomeAdapter((view, gank) -> {
+        HomeAdapter adapter = new HomeAdapter((v, gank) -> {
             NavDirections navDirections = MainNavigationDirections.actionToWebViewFragment(gank.getTitle(), gank.getUrl());
 //            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
             Navigation.findNavController(view).navigate(navDirections);
@@ -91,7 +85,7 @@ public class HomeFragment extends DaggerFragment {
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         homeViewModel.banners.observe(getViewLifecycleOwner(), gankBanners -> binding.banner.addBannerLifecycleObserver(getViewLifecycleOwner())//添加生命周期观察者
-                .setAdapter(new HomeBannerAdapter(gankBanners, (view, gankBanner) -> {
+                .setAdapter(new HomeBannerAdapter(gankBanners, (v, gankBanner) -> {
                     NavDirections navDirections = MainNavigationDirections.actionToWebViewFragment(gankBanner.getTitle(), gankBanner.getUrl());
 //            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
                     Navigation.findNavController(view).navigate(navDirections);

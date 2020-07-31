@@ -1,12 +1,6 @@
 package com.cheney.gankjava.bean;
 
 
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;

@@ -18,7 +18,7 @@ public class SystemModule {
     @Singleton
     @Provides
     @Named(Constants.NamedKey.PACKAGE_NAME)
-    static String providePackageName(Context context) {
+    String providePackageName(Context context) {
         return context.getPackageName();
     }
 
