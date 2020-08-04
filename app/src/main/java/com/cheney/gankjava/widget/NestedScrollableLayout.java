@@ -17,17 +17,17 @@ import com.cheney.gankjava.R;
  * ViewPager2滑动事件冲突
  * 1、SwipeRefreshLayout嵌套RecyclerView嵌套ViewPager2
  * <pre>
- *      <FixDragLayout android:orientation="horizontal">
+ *      <NestedScrollableLayout android:orientation="horizontal">
  *           <ViewPager2/>
- *      </FixDragLayout>
+ *      </NestedScrollableLayout>
  * </pre>
  * 2. ViewPager2嵌套SwipeRefreshLayout和RecyclerView
  * <pre>
- *      <FixDragLayout android:orientation="verticle">
+ *      <NestedScrollableLayout android:orientation="verticle">
  *          <SwipleRefreshLayout>
  *               <RecyclerView />
  *          </SwipleRefreshLayout>
- *      </FixDragLayout>
+ *      </NestedScrollableLayout>
  * </pre>
  */
 public class NestedScrollableLayout extends FrameLayout {

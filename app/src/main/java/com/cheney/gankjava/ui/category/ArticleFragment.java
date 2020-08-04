@@ -57,9 +57,9 @@ public class ArticleFragment extends DaggerFragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        adapter = new ArticleAdapter((view, gank) -> {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        adapter = new ArticleAdapter((v, gank) -> {
             NavDirections navDirections = MainNavigationDirections.actionToWebViewFragment(gank.getTitle(), gank.getUrl());
 //            NavHostFragment.findNavController(HomeFragment.this).navigate(navDirections);
             Navigation.findNavController(view).navigate(navDirections);
@@ -70,51 +70,5 @@ public class ArticleFragment extends DaggerFragment {
         viewModel.pagedListLiveData.observe(getViewLifecycleOwner(), ganks -> adapter.submitList(ganks));
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        System.out.println("ArticleFragment onCreate categoryType ="+categoryType.getTitle());
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        System.out.println("ArticleFragment onAttach categoryType ="+categoryType.getTitle());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println("ArticleFragment onResume categoryType ="+categoryType.getTitle());
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        System.out.println("ArticleFragment onPause categoryType ="+categoryType.getTitle());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        System.out.println("ArticleFragment onStop categoryType ="+categoryType.getTitle());
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        System.out.println("ArticleFragment onDestroyView categoryType ="+categoryType.getTitle());
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        System.out.println("ArticleFragment onDetach categoryType ="+categoryType.getTitle());
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        System.out.println("ArticleFragment onDestroy categoryType ="+categoryType.getTitle());
-    }
 }
